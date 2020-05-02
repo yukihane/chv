@@ -8,17 +8,26 @@ if (urlPattern.test(href)) {
   window.location.href = href.replace(urlPattern, "/");
 }
 
+// レスアンカーリンクのパターン
 const resPattern = /^\.\.\/test\/read\.cgi\/.+?\/.+?\/\d+$/;
-const linkTags = document.getElementsByTagName("a");
-for (const a of linkTags) {
-  const link = a.getAttribute("href");
-  if (link && resPattern.test(link)) {
-    a.onclick = (e) => {
-      e.preventDefault();
-      insertRes(a, a.href);
-    };
+// クッションページリンクのパターン
+const cushionPattern = /^https?:\/\/(jump\.5ch\.net|pinktower\.com)\/\?/;
+
+const modifyLinks = (element: Element) => {
+  const linkTags = element.getElementsByTagName("a");
+  for (const a of linkTags) {
+    // レスアンカーリンクだった場合にはクリック時にレスを表示する
+    const link = a.getAttribute("href");
+    if (link && resPattern.test(link)) {
+      a.onclick = (e) => {
+        e.preventDefault();
+        insertRes(a, a.href);
+      };
+    }
+    // クッションページを経由しないようにリンク書き換え
+    a.href = a.href.replace(cushionPattern, "");
   }
-}
+};
 
 const insertRes = (refNode: HTMLElement, link: string) => {
   chrome.runtime.sendMessage(
@@ -28,12 +37,41 @@ const insertRes = (refNode: HTMLElement, link: string) => {
       const htmlDocument = parser.parseFromString(text, "text/html");
       const content = htmlDocument.getElementsByClassName("thread").item(0);
       if (content) {
-        insertAfter(content, refNode);
+        const resDisplay = createResDisplay(content)!;
+        insertAfter(resDisplay, refNode);
       }
     }
   );
 };
 
-const insertAfter = (newNode: Element, referenceNode: HTMLElement) => {
+const createResDisplay = (content: Element) => {
+  const div = document.createElement("div");
+  const hideButton = document.createElement("input");
+  hideButton.setAttribute("type", "button");
+  hideButton.setAttribute("value", "↓非表示");
+  hideButton.onclick = hideRes;
+  const hideButtonBottom = document.createElement("input");
+  hideButtonBottom.setAttribute("type", "button");
+  hideButtonBottom.setAttribute("value", "↑非表示");
+  hideButtonBottom.onclick = hideRes;
+
+  div.appendChild(hideButton);
+  div.appendChild(content);
+  div.appendChild(hideButtonBottom);
+
+  modifyLinks(div);
+
+  return div;
+};
+
+const hideRes = (ev: MouseEvent) => {
+  const target = ev.target as HTMLInputElement;
+  const parent = target.parentElement!;
+  parent.remove();
+};
+
+const insertAfter = (newNode: Node, referenceNode: HTMLElement) => {
   referenceNode.parentNode?.insertBefore(newNode, referenceNode.nextSibling);
 };
+
+modifyLinks(document.documentElement);
