@@ -3,7 +3,10 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/contentScript.ts",
+  entry: {
+    contentScript: "./src/contentScript.ts",
+    background: "./src/background.ts",
+  },
   devtool: "inline-source-map",
   plugins: [new CopyWebpackPlugin([{ from: "public" }])],
   module: {
@@ -19,7 +22,7 @@ module.exports = {
     extensions: [".tsx", ".ts", ".js"],
   },
   output: {
-    filename: "contentScript.js",
+    filename: "[name].js",
     path: path.resolve(__dirname, "build"),
   },
 };

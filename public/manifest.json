@@ -8,5 +8,9 @@
       "matches": ["*://*.5ch.net/test/*", "*://*.bbspink.com/test/*"],
       "js": ["contentScript.js"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
 }
