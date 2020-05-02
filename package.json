@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack -w"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^5.1.1",
