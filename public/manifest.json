@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "chv",
+  "description": "5ch.netファミリービューア",
+  "version": "0.0.1",
+  "content_scripts": [
+    {
+      "matches": ["*://*.5ch.net/test/*", "*://*.bbspink.com/test/*"],
+      "js": ["contentScript.js"]
+    }
+  ]
+}
