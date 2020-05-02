@@ -8,17 +8,16 @@ if (urlPattern.test(href)) {
   window.location.href = href.replace(urlPattern, "/");
 }
 
-// レスアンカーリンクのパターン
-const resPattern = /^\.\.\/test\/read\.cgi\/.+?\/.+?\/\d+$/;
+// include可能なリンク(レスアンカーリンク)のパターン
+const resPattern = /^https?:\/\/.*?\.(5ch\.net|bbspink.com)\/test\/read\.cgi\/.+?\/\d+?\/[\d\-n]+$/;
 // クッションページリンクのパターン
-const cushionPattern = /^https?:\/\/(jump\.5ch\.net|pinktower\.com)\/\?/;
+const cushionPattern = /^https?:\/\/(jump\.5ch\.net|(www\.)?pinktower\.com)\/\?/;
 
 const modifyLinks = (element: Element) => {
   const linkTags = element.getElementsByTagName("a");
   for (const a of linkTags) {
     // レスアンカーリンクだった場合にはクリック時にレスを表示する
-    const link = a.getAttribute("href");
-    if (link && resPattern.test(link)) {
+    if (resPattern.test(a.href)) {
       a.onclick = (e) => {
         e.preventDefault();
         insertRes(a, a.href);
