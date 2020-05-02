@@ -7,6 +7,7 @@
     "watch": "webpack -w"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.106",
     "copy-webpack-plugin": "^5.1.1",
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
