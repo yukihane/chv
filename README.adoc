@@ -1,0 +1,3 @@
+== これは何？
+
+https://www.5ch.net/, https://www.bbspink.com/ を快適に閲覧することを目的としたGoogle Chrome Extension(試したことはないですが、極僅かの修正でFirefoxでも動くはず)。
