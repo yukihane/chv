@@ -1,3 +1,5 @@
+import { FetchRequest, FetchResponse } from "./messages";
+
 // 多くの場合最新50件のみを取得するリンクになっているので
 // URLの /l50 を除去して全件表示する
 const urlPattern = /\/l50$|\/L#sugar$/;
@@ -19,16 +21,17 @@ for (const a of linkTags) {
 }
 
 const insertRes = (refNode: HTMLElement, link: string) => {
-  fetch(link)
-    .then((response) => response.text())
-    .then((text) => {
+  chrome.runtime.sendMessage(
+    { url: link } as FetchRequest,
+    ({ text }: FetchResponse) => {
       const parser = new DOMParser();
       const htmlDocument = parser.parseFromString(text, "text/html");
       const content = htmlDocument.getElementsByClassName("thread").item(0);
       if (content) {
         insertAfter(content, refNode);
       }
-    });
+    }
+  );
 };
 
 const insertAfter = (newNode: Element, referenceNode: HTMLElement) => {
