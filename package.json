@@ -4,7 +4,8 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "webpack",
-    "watch": "webpack -w"
+    "watch": "webpack -w",
+    "package": "rm -rf build dist && webpack --mode=production && mkdir -p dist && cd build && zip -r ../dist/chv.zip ."
   },
   "devDependencies": {
     "@types/chrome": "^0.0.106",
